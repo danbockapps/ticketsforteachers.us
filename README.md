@@ -16,9 +16,10 @@ nginx.conf            # server block (static serving + /91-2/ -> /about/ redirec
 ```
 
 The pages are fully static: all CSS is inlined in the HTML (SiteGround critical
-CSS), and the only interactivity is `mailto:` / external links. The bundled
-jQuery + Divi scripts are kept so the markup behaves identically (mobile menu
-toggle, etc.), but nothing on these two pages needs a backend.
+CSS), and the only interactivity is `mailto:` / external links. **All JavaScript
+has been removed** — jQuery, jquery-migrate, the 274 KB Divi `scripts.min.js`,
+lazysizes, and et-core-common (~384 KB total). Nothing on these two pages needs
+it. The only `<script>` kept is the JSON-LD SEO schema (not executable code).
 
 ## What was changed from the original
 
@@ -29,6 +30,10 @@ toggle, etc.), but nothing on these two pages needs a backend.
 - Dead WordPress head tags removed (wp-json/REST, RSD/EditURI, shortlink, RSS &
   oEmbed links, generator meta) — none affect rendering.
 - Fixed a broken `mailto::matt@...` link (double colon) on the home page.
+- Removed all JavaScript and the corresponding `.js` files. Since the mobile
+  hamburger menu was JS-driven, a small `<style id="static-overrides">` keeps the
+  2-item nav visible on mobile and hides the (backend-less) search UI. The `js`
+  class the inline script used to set is now baked into the `<html>` tag.
 - External references left as-is (Google Fonts; the rootedindps.org partnership
   link; Gravatar/schema metadata).
 

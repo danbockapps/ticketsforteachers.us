@@ -34,6 +34,11 @@ it. The only `<script>` kept is the JSON-LD SEO schema (not executable code).
   hamburger menu was JS-driven, a small `<style id="static-overrides">` keeps the
   2-item nav visible on mobile and hides the (backend-less) search UI. The `js`
   class the inline script used to set is now baked into the `<html>` tag.
+- Converted the logo to WebP (`TicketsforTeachers.png` 247 KB -> 31 KB; the 480px
+  variant 134 KB -> 21 KB) and updated the `<img>`/`srcset` refs.
+- Dropped the Divi ETmodules icon font (4 files) and its `@font-face` — the only
+  icons that used it (search, hamburger) are hidden. Leftover `font-family:
+  ETmodules` declarations are inert with no `@font-face` to load.
 - External references left as-is (Google Fonts; the rootedindps.org partnership
   link; Gravatar/schema metadata).
 

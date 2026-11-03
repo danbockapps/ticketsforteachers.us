@@ -9,11 +9,10 @@
 
 services:
   db:
-    image: mariadb:11
+    # 11.4 LTS: newer 11.8 uses io_uring, which Docker's default seccomp
+    # profile blocks (EPERM), aborting first-time database initialization.
+    image: mariadb:11.4
     restart: unless-stopped
-    # innodb_use_native_async_io relies on io_uring, which Docker's default
-    # seccomp profile blocks (EPERM), aborting first-time init. Disable it.
-    command: --innodb-use-native-async-io=0
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: wordpress

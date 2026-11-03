@@ -1,0 +1,45 @@
+# WordPress trial for ticketsforteachers.us, served at https://tk.danbock.net
+# nginx on the host reverse-proxies to 127.0.0.1:8090.
+#
+# Start:   docker compose up -d
+# Stop:    docker compose down          (data survives in volumes)
+# Nuke:    docker compose down -v       (deletes DB + uploads)
+#
+# Copy .env.example to .env and fill in passwords before first start.
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    # No ports published — only reachable from the wordpress container.
+
+  wordpress:
+    image: wordpress:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:8090:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      # Hardcode the final URLs so WP generates correct links.
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'https://tk.danbock.net');
+        define('WP_SITEURL', 'https://tk.danbock.net');
+    volumes:
+      - wp-data:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+
+volumes:
+  db-data:
+  wp-data:

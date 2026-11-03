@@ -18,11 +18,12 @@ static site on the VPS. The static `site/` and the main nginx server block for
    cp .env.example .env    # then edit passwords
    docker compose up -d
    ```
-3. **Cert** — `sudo certbot --nginx -d tk.danbock.net`
-4. **Nginx** — copy `nginx-tk.conf` to `/etc/nginx/sites-available/tk.danbock.net`,
-   symlink into `sites-enabled/`, then `sudo nginx -t && sudo systemctl reload nginx`.
-   (Steps 3 and 4 can be swapped — see the comment header in `nginx-tk.conf`.)
-5. **Install WordPress** — open https://tk.danbock.net and follow the
+3. **Nginx** — copy `nginx-tk.conf` to `/etc/nginx/sites-available/tk.danbock.net`,
+   symlink into `sites-enabled/`, **comment out the 443 server block** (the cert
+   doesn't exist yet), then `sudo nginx -t && sudo systemctl reload nginx`.
+4. **Cert** — `sudo certbot certonly --nginx -d tk.danbock.net`
+5. Re-enable the 443 block, then `sudo nginx -t && sudo systemctl reload nginx`.
+6. **Install WordPress** — open https://tk.danbock.net and follow the
    5-minute install. Pick any admin username/password; this is a trial box.
 
 ## Day to day
